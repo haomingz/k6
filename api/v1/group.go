@@ -21,10 +21,6 @@
 package v1
 
 import (
-	"fmt"
-
-	"github.com/manyminds/api2go/jsonapi"
-
 	"go.k6.io/k6/lib"
 )
 
@@ -82,75 +78,6 @@ func NewGroup(g *lib.Group, parent *Group) *Group {
 	}
 
 	return group
-}
-
-func (g Group) GetID() string {
-	return g.ID
-}
-
-func (g *Group) SetID(v string) error {
-	g.ID = v
-	return nil
-}
-
-// GetReferences TODO delete
-func (g Group) GetReferences() []jsonapi.Reference {
-	return []jsonapi.Reference{
-		{
-			Type:         "groups",
-			Name:         "parent",
-			Relationship: jsonapi.ToOneRelationship,
-		},
-		{
-			Type:         "groups",
-			Name:         "groups",
-			Relationship: jsonapi.ToManyRelationship,
-		},
-	}
-}
-
-// GetReferencedIDs TODO delete
-func (g Group) GetReferencedIDs() []jsonapi.ReferenceID {
-	refs := []jsonapi.ReferenceID{}
-	if g.Parent != nil {
-		refs = append(refs, jsonapi.ReferenceID{
-			ID:           g.Parent.GetID(),
-			Type:         "groups",
-			Name:         "parent",
-			Relationship: jsonapi.ToOneRelationship,
-		})
-	}
-	for _, gp := range g.Groups {
-		refs = append(refs, jsonapi.ReferenceID{
-			ID:           gp.GetID(),
-			Type:         "groups",
-			Name:         "groups",
-			Relationship: jsonapi.ToManyRelationship,
-		})
-	}
-	return refs
-}
-
-func (g *Group) SetToManyReferenceIDs(name string, ids []string) error {
-	switch name {
-	case "groups":
-		g.Groups = nil
-		g.GroupIDs = ids
-		return nil
-	default:
-		return fmt.Errorf("unknown to many relation: %s", name)
-	}
-}
-
-func (g *Group) SetToOneReferenceID(name, id string) error {
-	switch name {
-	case "parent":
-		g.Parent = nil
-		g.ParentID = id
-		return nil
-	default:
-		return fmt.Errorf("unknown to one relation: %s", name)
-	}
 }
 
 func FlattenGroup(g *Group) []*Group {

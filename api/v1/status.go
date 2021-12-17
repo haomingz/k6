@@ -50,18 +50,3 @@ func NewStatus(engine *core.Engine) Status {
 		Tainted: engine.IsTainted(),
 	}
 }
-
-// GetName TODO: delete
-func (s Status) GetName() string {
-	return "status"
-}
-
-// GetID TODO: delete
-func (s Status) GetID() string {
-	return "default"
-}
-
-// SetID TODO: delete
-func (s Status) SetID(id string) error {
-	return nil
-}

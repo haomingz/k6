@@ -91,14 +91,3 @@ func NewMetric(m *stats.Metric, t time.Duration) Metric {
 		Sample:   m.Sink.Format(t),
 	}
 }
-
-// GetID TODO: delete
-func (m Metric) GetID() string {
-	return m.Name
-}
-
-// SetID TODO: delete
-func (m *Metric) SetID(id string) error {
-	m.Name = id
-	return nil
-}

@@ -29,7 +29,6 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/manyminds/api2go/jsonapi"
 	"github.com/sirupsen/logrus"
 
 	v1 "go.k6.io/k6/api/v1"
@@ -99,7 +98,8 @@ func (c *Client) Call(ctx context.Context, method string, rel *url.URL, body, ou
 		case string:
 			bodyData = []byte(val)
 		default:
-			bodyData, err = jsonapi.Marshal(body)
+			// TODO: not sure if it safe, should we introduce another Call ?
+			bodyData, err = json.Marshal(body)
 			if err != nil {
 				return err
 			}
@@ -134,7 +134,8 @@ func (c *Client) Call(ctx context.Context, method string, rel *url.URL, body, ou
 	}
 
 	if out != nil {
-		return jsonapi.Unmarshal(data, out)
+		// not sure if it's safe
+		return json.Unmarshal(data, out)
 	}
 	return nil
 }
